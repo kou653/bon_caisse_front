@@ -1,0 +1,139 @@
+.voucher-preview-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+.voucher-paper {
+  background-color: #ffffff;
+  width: 210mm; /* A4 width */
+  min-height: 297mm; /* A4 height */
+  padding: 40mm 20mm;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  position: relative;
+  font-family: 'Times New Roman', Times, serif;
+  color: #1f2937;
+  overflow: hidden;
+}
+
+/* Watermark background */
+.voucher-paper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="none" stroke="%23e5e7eb" stroke-width="2"/><path d="M50 10 C 20 40, 20 60, 50 90 C 80 60, 80 40, 50 10" fill="%23f3f4f6" opacity="0.5"/></svg>');
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.voucher-title {
+  text-align: center;
+  font-size: 24pt;
+  letter-spacing: 2px;
+  font-weight: normal;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.voucher-field {
+  display: flex;
+  margin-bottom: 1.5rem;
+  font-size: 14pt;
+  position: relative;
+  z-index: 1;
+}
+
+.field-label {
+  white-space: nowrap;
+  margin-right: 1rem;
+}
+
+.field-dots {
+  flex-grow: 1;
+  border-bottom: 2px dotted #9ca3af;
+  font-family: 'Courier New', Courier, monospace;
+  display: inline-block;
+  min-height: 1.2rem;
+  padding-bottom: 2px;
+}
+
+.voucher-reason-block {
+  position: relative;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.lines-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.bg-line {
+  height: 35px;
+  border-bottom: 2px dotted #9ca3af;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 2px;
+  box-sizing: border-box;
+}
+
+.bg-number {
+  width: 30px;
+  text-align: left;
+  font-size: 14pt;
+}
+
+.reason-text {
+  position: relative;
+  z-index: 1;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14pt;
+  line-height: 35px;
+  min-height: 420px; /* 12 lines * 35px */
+  padding-left: 35px; /* Offset for numbers */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding-top: 2px;
+}
+
+.voucher-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.signature-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+}
+
+.signature-title {
+  font-size: 12pt;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-bottom: 3rem; /* Space for signature */
+}
+
+.signature-space {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14pt;
+  border-bottom: 1px solid transparent; /* Allows text without ugly border if empty, but can add if needed */
+  min-width: 100px;
+  text-align: center;
+}
