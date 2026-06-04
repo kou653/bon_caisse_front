@@ -9,13 +9,15 @@
 .voucher-paper {
   background-color: #ffffff;
   width: 210mm; /* A4 width */
-  min-height: 297mm; /* A4 height */
+  height: 297mm; /* Exact A4 height to prevent overflowing to a second page */
+  max-height: 297mm;
   padding: 40mm 20mm;
+  box-sizing: border-box;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   position: relative;
-  font-family: 'Times New Roman', Times, serif;
   color: #1f2937;
   overflow: hidden;
+  page-break-inside: avoid;
 }
 
 /* Watermark background */
@@ -27,11 +29,28 @@
   transform: translate(-50%, -50%);
   width: 400px;
   height: 400px;
-  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="none" stroke="%23e5e7eb" stroke-width="2"/><path d="M50 10 C 20 40, 20 60, 50 90 C 80 60, 80 40, 50 10" fill="%23f3f4f6" opacity="0.5"/></svg>');
+  background-image: url('/filigrane .png');
   background-repeat: no-repeat;
   background-size: contain;
+  background-position: center;
   z-index: 0;
   pointer-events: none;
+  opacity: 0.2; /* Ajout d'une opacité pour que le texte reste lisible */
+}
+
+.voucher-logo {
+  text-align: center;
+  margin-bottom: 0.3rem;
+  margin-top: -20mm;
+  position: relative;
+  z-index: 1;
+}
+
+.voucher-logo-img {
+  max-height: 50px;
+  max-width: 180px;
+  width: auto;
+  object-fit: contain;
 }
 
 .voucher-title {
@@ -60,7 +79,6 @@
 .field-dots {
   flex-grow: 1;
   border-bottom: 2px dotted #9ca3af;
-  font-family: 'Courier New', Courier, monospace;
   display: inline-block;
   min-height: 1.2rem;
   padding-bottom: 2px;
@@ -98,10 +116,10 @@
 .reason-text {
   position: relative;
   z-index: 1;
-  font-family: 'Courier New', Courier, monospace;
   font-size: 14pt;
   line-height: 35px;
-  min-height: 420px; /* 12 lines * 35px */
+  height: 420px; /* Exact height for 12 lines * 35px */
+  overflow: hidden; /* Prevent text from pushing the page down */
   padding-left: 35px; /* Offset for numbers */
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -131,9 +149,33 @@
 }
 
 .signature-space {
-  font-family: 'Courier New', Courier, monospace;
   font-size: 14pt;
-  border-bottom: 1px solid transparent; /* Allows text without ugly border if empty, but can add if needed */
+  border-bottom: 1px solid transparent;
   min-width: 100px;
   text-align: center;
+}
+
+.voucher-footer {
+  position: absolute;
+  bottom: 18mm;
+  left: 20mm;
+  right: 20mm;
+  z-index: 1;
+}
+
+.voucher-footer-line {
+  border-top: 1px solid #1f2937;
+  margin-bottom: 4px;
+}
+
+.voucher-footer-text {
+  font-size: 7pt;
+  color: #1f2937;
+  text-align: center;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.voucher-footer-link {
+  text-decoration: underline;
 }
