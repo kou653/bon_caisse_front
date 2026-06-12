@@ -35,7 +35,10 @@
   background-position: center;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.2; /* Ajout d'une opacité pour que le texte reste lisible */
+  opacity: 0.2;
+  /* Force l'affichage des images de fond à l'impression */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .voucher-logo {
@@ -178,4 +181,18 @@
 
 .voucher-footer-link {
   text-decoration: underline;
+}
+
+/* ─── FORCER LE FILIGRANE À L'IMPRESSION ─── */
+@media print {
+  .voucher-paper {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .voucher-paper::before {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    opacity: 0.2 !important;
+    display: block !important;
+  }
 }
