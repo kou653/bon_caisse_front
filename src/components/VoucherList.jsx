@@ -8,8 +8,12 @@ export default function VoucherList({ onNewVoucher, onViewVoucher }) {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/cash-vouchers', {
-      headers: { 'Accept': 'application/json' }
+    fetch('http://localhost:8000/api/cash-vouchers?t=' + Date.now(), {
+      headers: { 
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
     })
       .then(res => {
         if (!res.ok) throw new Error('Erreur serveur');
@@ -31,7 +35,15 @@ export default function VoucherList({ onNewVoucher, onViewVoucher }) {
     String(v.id).includes(search)
   );
 
-  const totalMontant = vouchers.reduce((acc, v) => acc + (parseFloat(v.amount) || 0), 0);
+  console.log("Calcul totalMontant pour vouchers:", vouchers);
+  const totalMontant = vouchers.reduce((acc, v) => {
+    // Nettoie la chaîne (enlève les espaces et remplace la virgule par un point)
+    const amountStr = String(v.amount || '').replace(/\s/g, '').replace(',', '.');
+    const val = parseFloat(amountStr) || 0;
+    console.log(`id: ${v.id}, amount brut: ${v.amount}, nettoyé: ${amountStr}, parsed: ${val}`);
+    return acc + val;
+  }, 0);
+  console.log("totalMontant calculé:", totalMontant);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '–';
