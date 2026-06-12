@@ -1,0 +1,290 @@
+/* ─── PAGE LISTE ─── */
+.list-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #149655 0%, #ffffff 100%) no-repeat fixed;
+  padding: 2.5rem 3rem;
+  font-family: 'AvantGarde', sans-serif;
+}
+
+/* ─── HEADER ─── */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+}
+
+.list-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.list-header-logo {
+  height: 42px;
+  width: auto;
+}
+
+.list-header-divider {
+  width: 1px;
+  height: 36px;
+  background: #d0d0cb;
+}
+
+.list-header-titles h1 {
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #1a1a1a;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.list-header-titles p {
+  font-size: 0.78rem;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+/* ─── BOUTON NOUVEAU BON ─── */
+.btn-primary {
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1.3rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: bold;
+  font-family: 'AvantGarde', sans-serif;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #333;
+}
+
+/* ─── STATS ─── */
+.list-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 10px;
+  padding: 1.1rem 1.4rem;
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: #aaa;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.stat-value {
+  font-size: 1.35rem;
+  font-weight: bold;
+  color: #1a1a1a;
+  display: block;
+}
+
+/* ─── BARRE DE RECHERCHE ─── */
+.list-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.list-search-bar input {
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  font-family: 'AvantGarde', sans-serif;
+  color: #1a1a1a;
+  flex: 1;
+  background: transparent;
+}
+
+.list-search-bar input::placeholder {
+  color: #bbb;
+}
+
+.list-search-icon {
+  color: #bbb;
+  font-size: 0.9rem;
+}
+
+/* ─── TABLEAU ─── */
+.list-table-wrapper {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.list-table thead tr {
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.list-table thead th {
+  padding: 0.85rem 1.1rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: #888;
+  background: #fff;
+}
+
+.list-table tbody tr {
+  border-bottom: 1px solid #f0f0eb;
+  transition: background 0.12s;
+}
+
+.list-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.list-table tbody tr:hover {
+  background: #fafaf8;
+}
+
+.list-table tbody td {
+  padding: 0.85rem 1.1rem;
+  font-size: 0.88rem;
+  color: #333;
+  vertical-align: middle;
+}
+
+.td-id {
+  font-weight: bold;
+  color: #aaa;
+  font-size: 0.8rem;
+}
+
+.td-project {
+  font-weight: 600;
+  color: #1a1a1a;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.td-amount {
+  font-weight: bold;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.td-reason {
+  color: #888;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.83rem;
+}
+
+.td-date {
+  font-size: 0.8rem;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.td-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.btn-view {
+  background: #f5f5f0;
+  color: #1a1a1a;
+  border: 1px solid #e0e0db;
+  padding: 0.3rem 0.75rem;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-family: 'AvantGarde', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.2px;
+}
+
+.btn-view:hover {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+
+/* ─── ÉTAT VIDE ─── */
+.list-empty {
+  text-align: center;
+  padding: 3.5rem 2rem;
+  color: #ccc;
+}
+
+.list-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.list-empty p {
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+/* ─── CHARGEMENT ─── */
+.list-loading {
+  text-align: center;
+  padding: 3rem;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.spinner {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #e0e0db;
+  border-top-color: #1a1a1a;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── ERREUR ─── */
+.list-error {
+  text-align: center;
+  padding: 1.5rem 2rem;
+  color: #c0392b;
+  font-size: 0.88rem;
+  background: #fff5f5;
+  border-radius: 8px;
+  border: 1px solid #fdd;
+}
