@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/VoucherList.css';
 
+const API = 'http://localhost:8000/api';
+
+// Fetch avec timeout de 8s
+const fetchWithTimeout = (url, options = {}, ms = 8000) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(id));
+};
+
 export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, authUser, onLogout }) {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,24 +18,31 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/cash-vouchers?t=' + Date.now(), {
+    fetchWithTimeout(`${API}/cash-vouchers?t=` + Date.now(), {
       headers: { 
         'Accept': 'application/json',
         'Authorization': `Bearer ${authToken}`,
         'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
       }
     })
       .then(res => {
-        if (!res.ok) throw new Error('Erreur serveur');
+        if (res.status === 401) {
+          onLogout(); // Token expiré → retour login
+          return null;
+        }
+        if (!res.ok) throw new Error(`Erreur serveur (${res.status})`);
         return res.json();
       })
       .then(data => {
+        if (data === null) return; // 401 géré ci-dessus
         setVouchers(data);
         setLoading(false);
       })
-      .catch(() => {
-        setError('Impossible de charger les bons. Vérifiez que le serveur Laravel est démarré.');
+      .catch(err => {
+        const msg = err.name === 'AbortError'
+          ? 'Le serveur ne répond pas (timeout). Vérifiez que Laravel est démarré.'
+          : `Impossible de charger les bons : ${err.message}`;
+        setError(msg);
         setLoading(false);
       });
   }, [authToken]);

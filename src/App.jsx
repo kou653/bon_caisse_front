@@ -7,6 +7,14 @@ import './App.css';
 
 const API = 'http://localhost:8000/api';
 
+// Helper : fetch avec timeout
+const fetchWithTimeout = (url, options = {}, ms = 8000) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(id));
+};
+
 const emptyVoucher = {
   project: '',
   amount: '',
@@ -21,10 +29,39 @@ const emptyVoucher = {
 
 function App() {
   // ── Auth ──
-  const [authToken, setAuthToken] = useState(() => localStorage.getItem('auth_token'));
-  const [authUser,  setAuthUser]  = useState(() => {
-    try { return JSON.parse(localStorage.getItem('auth_user')); } catch { return null; }
-  });
+  const [authToken, setAuthToken] = useState(null);
+  const [authUser,  setAuthUser]  = useState(null);
+  const [authChecking, setAuthChecking] = useState(true); // vérification initiale du token
+
+  // ── Vérification du token au démarrage ──
+  useEffect(() => {
+    const storedToken = localStorage.getItem('auth_token');
+    if (!storedToken) {
+      setAuthChecking(false);
+      return;
+    }
+    // Vérifier que le token est toujours valide
+    fetchWithTimeout(`${API}/me`, {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${storedToken}`,
+      },
+    })
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Token invalide');
+      })
+      .then(user => {
+        setAuthToken(storedToken);
+        setAuthUser(user);
+      })
+      .catch(() => {
+        // Token périmé ou invalide → nettoyer
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+      })
+      .finally(() => setAuthChecking(false));
+  }, []);
 
   // ── Navigation ──
   const [page, setPage]               = useState('list');
@@ -44,14 +81,44 @@ function App() {
     };
   }, []);
 
+  // Callback de connexion réussie
+  const handleLogin = (user, token) => {
+    setAuthToken(token);
+    setAuthUser(user);
+  };
+
+  // ─────────────────────────────────────────────
+  // Écran de chargement pendant la vérification du token
+  // ─────────────────────────────────────────────
+  if (authChecking) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #0a2e1a 0%, #149655 100%)',
+        flexDirection: 'column',
+        gap: '1rem',
+        color: '#fff',
+        fontFamily: 'system-ui, sans-serif'
+      }}>
+        <div style={{
+          width: 40, height: 40,
+          border: '3px solid rgba(255,255,255,0.3)',
+          borderTop: '3px solid #fff',
+          borderRadius: '50%',
+          animation: 'spin 0.7s linear infinite'
+        }} />
+        <p style={{ fontSize: '0.9rem', opacity: 0.8 }}>Chargement…</p>
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────
   // Page de connexion
   // ─────────────────────────────────────────────
   if (!authToken) {
-    const handleLogin = (user, token) => {
-      setAuthToken(token);
-      setAuthUser(user);
-    };
     return <LoginPage onLogin={handleLogin} />;
   }
 
