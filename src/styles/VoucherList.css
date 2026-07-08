@@ -100,6 +100,13 @@
 
 .btn-primary:hover {
   background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transition: all var(--transition-base);
+}
+
+.btn-primary {
+  transition: all var(--transition-base);
 }
 
 /* ─── STATS ─── */
@@ -115,6 +122,15 @@
   border-radius: 10px;
   padding: 1.1rem 1.4rem;
   flex: 1;
+  transition: all var(--transition-base);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  border-color: #149655;
 }
 
 .stat-label {
@@ -144,6 +160,13 @@
   border-radius: 8px;
   padding: 0.55rem 1rem;
   margin-bottom: 1.2rem;
+  transition: all var(--transition-base);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.list-search-bar:focus-within {
+  border-color: #149655;
+  box-shadow: 0 4px 12px rgba(20, 150, 85, 0.15);
 }
 
 .list-search-bar input {
@@ -171,6 +194,8 @@
   border: 1px solid #e8e8e4;
   border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: box-shadow var(--transition-base);
 }
 
 .list-table {
@@ -195,7 +220,12 @@
 
 .list-table tbody tr {
   border-bottom: 1px solid #f0f0eb;
-  transition: background 0.12s;
+  transition: all var(--transition-fast);
+}
+
+.list-table tbody tr:hover {
+  background: #f9fafb;
+  box-shadow: inset 0 0 0 1px #e8e8e4;
 }
 
 .list-table tbody tr:last-child {

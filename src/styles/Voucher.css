@@ -2,8 +2,9 @@
   display: flex;
   justify-content: center;
   padding: 2rem;
-  background-color: #f3f4f6;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
   min-height: 100vh;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .voucher-paper {
@@ -13,11 +14,17 @@
   max-height: 297mm;
   padding: 40mm 20mm;
   box-sizing: border-box;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.06);
   position: relative;
   color: #1f2937;
   overflow: hidden;
   page-break-inside: avoid;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: box-shadow var(--transition-base);
+}
+
+.voucher-paper:hover {
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.06);
 }
 
 /* Watermark background */
