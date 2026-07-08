@@ -324,3 +324,48 @@
   border-radius: 8px;
   border: 1px solid #fdd;
 }
+
+/* ─── BOUTONS DE TRI ─── */
+.sort-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  transition: color 0.2s;
+  font-family: 'AvantGarde', sans-serif;
+}
+
+.sort-btn:hover {
+  color: #1a1a1a;
+}
+
+.sort-btn.active {
+  color: #1a1a1a;
+}
+
+.sort-arrow {
+  display: inline-block;
+  font-size: 0.65rem;
+  transition: transform 0.2s;
+  opacity: 0.4;
+}
+
+.sort-btn.active .sort-arrow {
+  opacity: 1;
+}
+
+.sort-btn.active .sort-arrow.up {
+  transform: rotate(180deg);
+}
+
+.sort-btn.active .sort-arrow.down {
+  transform: rotate(0deg);
+}

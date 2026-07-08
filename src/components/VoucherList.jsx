@@ -16,6 +16,8 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
+  const [sortBy, setSortBy] = useState(null); // 'project', 'reason', 'date'
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc', 'desc'
 
   useEffect(() => {
     fetchWithTimeout(`${API}/cash-vouchers?t=` + Date.now(), {
@@ -53,6 +55,38 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
     String(v.id).includes(search)
   );
 
+  // Fonction de tri
+  const handleSort = (column) => {
+    if (sortBy === column) {
+      // Si on clique sur la même colonne, inverser l'ordre
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Nouvelle colonne, tri ascendant par défaut
+      setSortBy(column);
+      setSortOrder('asc');
+    }
+  };
+
+  // Appliquer le tri au tableau filtré
+  const sorted = [...filtered].sort((a, b) => {
+    let aVal, bVal;
+
+    if (sortBy === 'project') {
+      aVal = (a.project || '').toLowerCase();
+      bVal = (b.project || '').toLowerCase();
+    } else if (sortBy === 'reason') {
+      aVal = (a.reason || '').toLowerCase();
+      bVal = (b.reason || '').toLowerCase();
+    } else if (sortBy === 'date') {
+      aVal = new Date(a.created_at) || new Date(0);
+      bVal = new Date(b.created_at) || new Date(0);
+    }
+
+    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
+    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
+
   console.log("Calcul totalMontant pour vouchers:", vouchers);
   const totalMontant = vouchers.reduce((acc, v) => {
     // Nettoie la chaîne (enlève les espaces et remplace la virgule par un point)
@@ -73,6 +107,12 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
   const formatMontant = (val) => {
     if (!val && val !== 0) return '–';
     return Number(val).toLocaleString('fr-FR') + ' Fcfa';
+  };
+
+  const handleLogoutClick = () => {
+    if (window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+      onLogout();
+    }
   };
 
   return (
@@ -97,7 +137,7 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
           <button className="btn-primary" onClick={onNewVoucher}>
             + Nouveau bon
           </button>
-          <button className="btn-logout" onClick={onLogout} title="Se déconnecter">
+          <button className="btn-logout" onClick={handleLogoutClick} title="Se déconnecter">
             ⏻ Déconnexion
           </button>
         </div>
@@ -156,15 +196,48 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
             <thead>
               <tr>
                 <th>N°</th>
-                <th>Projet</th>
+                <th>
+                  <button 
+                    className={`sort-btn ${sortBy === 'project' ? 'active' : ''}`}
+                    onClick={() => handleSort('project')}
+                    title="Trier par projet"
+                  >
+                    Projet 
+                    <span className={`sort-arrow ${sortBy === 'project' ? (sortOrder === 'asc' ? 'up' : 'down') : ''}`}>
+                      ▼
+                    </span>
+                  </button>
+                </th>
                 <th>Montant</th>
-                <th>Motif</th>
-                <th>Date</th>
+                <th>
+                  <button 
+                    className={`sort-btn ${sortBy === 'reason' ? 'active' : ''}`}
+                    onClick={() => handleSort('reason')}
+                    title="Trier par motif"
+                  >
+                    Motif 
+                    <span className={`sort-arrow ${sortBy === 'reason' ? (sortOrder === 'asc' ? 'up' : 'down') : ''}`}>
+                      ▼
+                    </span>
+                  </button>
+                </th>
+                <th>
+                  <button 
+                    className={`sort-btn ${sortBy === 'date' ? 'active' : ''}`}
+                    onClick={() => handleSort('date')}
+                    title="Trier par date"
+                  >
+                    Date 
+                    <span className={`sort-arrow ${sortBy === 'date' ? (sortOrder === 'asc' ? 'up' : 'down') : ''}`}>
+                      ▼
+                    </span>
+                  </button>
+                </th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 ? (
+              {sorted.length === 0 ? (
                 <tr>
                   <td colSpan={6}>
                     <div className="list-empty">
@@ -174,7 +247,7 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
                   </td>
                 </tr>
               ) : (
-                filtered.map(v => (
+                sorted.map(v => (
                   <tr key={v.id}>
                     <td className="td-id">#{v.id}</td>
                     <td className="td-project">{v.project || <span style={{color:'#ddd'}}>—</span>}</td>
