@@ -48,6 +48,42 @@
 }
 
 /* ─── BOUTON NOUVEAU BON ─── */
+.list-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.list-user-badge {
+  font-size: 0.78rem;
+  color: #444;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  background: #f0f0eb;
+  border-radius: 20px;
+  border: 1px solid #e0e0db;
+  white-space: nowrap;
+}
+
+.btn-logout {
+  background: none;
+  color: #888;
+  border: 1px solid #ddd;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-family: 'AvantGarde', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
 .btn-primary {
   background: #1a1a1a;
   color: #fff;

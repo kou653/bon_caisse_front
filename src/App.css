@@ -1,3 +1,24 @@
+/* ── Bannière hors-ligne ── */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #f59e0b;
+  color: #1f2937;
+  text-align: center;
+  padding: 0.45rem 1rem;
+  font-size: 0.82rem;
+  font-weight: bold;
+  z-index: 9999;
+  animation: slideDownBanner 0.3s ease;
+}
+
+@keyframes slideDownBanner {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
+}
+
 @font-face {
   font-family: 'AvantGarde';
   src: url('./assets/fonts/ITCAvantGardeStd-Bk.woff2') format('woff2');

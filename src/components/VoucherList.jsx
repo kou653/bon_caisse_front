@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/VoucherList.css';
 
-export default function VoucherList({ onNewVoucher, onViewVoucher }) {
+export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, authUser, onLogout }) {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,6 +11,7 @@ export default function VoucherList({ onNewVoucher, onViewVoucher }) {
     fetch('http://localhost:8000/api/cash-vouchers?t=' + Date.now(), {
       headers: { 
         'Accept': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache'
       }
@@ -27,7 +28,7 @@ export default function VoucherList({ onNewVoucher, onViewVoucher }) {
         setError('Impossible de charger les bons. Vérifiez que le serveur Laravel est démarré.');
         setLoading(false);
       });
-  }, []);
+  }, [authToken]);
 
   const filtered = vouchers.filter(v =>
     (v.project || '').toLowerCase().includes(search.toLowerCase()) ||
@@ -70,9 +71,19 @@ export default function VoucherList({ onNewVoucher, onViewVoucher }) {
             <p>Historique des bons enregistrés</p>
           </div>
         </div>
-        <button className="btn-primary" onClick={onNewVoucher}>
-          + Nouveau bon
-        </button>
+        <div className="list-header-actions">
+          {authUser && (
+            <span className="list-user-badge">
+              👤 {authUser.name}
+            </span>
+          )}
+          <button className="btn-primary" onClick={onNewVoucher}>
+            + Nouveau bon
+          </button>
+          <button className="btn-logout" onClick={onLogout} title="Se déconnecter">
+            ⏻ Déconnexion
+          </button>
+        </div>
       </div>
 
       {/* ── Statistiques ── */}

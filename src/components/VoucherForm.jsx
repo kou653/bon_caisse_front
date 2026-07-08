@@ -22,11 +22,6 @@ export default function VoucherForm({ data, onChange, onSubmit }) {
         </div>
 
         <div className="form-group">
-          <label>Montant</label>
-          <input type="number" step="0.01" name="amount" value={data.amount} onChange={handleChange} placeholder="0.00" />
-        </div>
-
-        <div className="form-group">
           <label>Motif</label>
           <textarea 
             name="reason" 
@@ -35,6 +30,21 @@ export default function VoucherForm({ data, onChange, onSubmit }) {
             placeholder="Saisissez votre motif ici."
             rows="4"
           />
+        </div>
+
+        <div className="form-group">
+          <label>Numéro Wave</label>
+          <input type="text" name="wave_number" value={data.wave_number} onChange={handleChange} placeholder="Numéro Wave" />
+        </div>
+
+        <div className="form-group">
+          <label>Nom associé au numéro Wave</label>
+          <input type="text" name="wave_name" value={data.wave_name} onChange={handleChange} placeholder="Nom associé" />
+        </div>
+
+        <div className="form-group">
+          <label>Montant</label>
+          <input type="number" step="0.01" name="amount" value={data.amount} onChange={handleChange} placeholder="0.00" />
         </div>
 
         <button type="submit" className="submit-btn">Enregistrer le Bon</button>

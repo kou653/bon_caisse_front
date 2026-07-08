@@ -11,31 +11,36 @@ export default function VoucherPreview({ data }) {
         <h1 className="voucher-title">BON DE CAISSE</h1>
 
         <div className="voucher-field">
-          <span className="field-label">PROJET :</span>
+          <span className="field-label">Projet :</span>
           <span className="field-dots">{data.project || ''}</span>
+        </div>
+
+        <div className="voucher-field-motif">
+          <span className="field-label">Motif :</span>
+          <div className="reason-multiline-container">
+            <div className="reason-lines-bg">
+              <div className="bg-line-simple"></div>
+              <div className="bg-line-simple"></div>
+            </div>
+            <div className="reason-text-simple">
+              {data.reason}
+            </div>
+          </div>
+        </div>
+
+        <div className="voucher-field">
+          <span className="field-label">Numéro wave :</span>
+          <span className="field-dots">{data.wave_number || ''}</span>
+        </div>
+
+        <div className="voucher-field">
+          <span className="field-label">Nom associé :</span>
+          <span className="field-dots">{data.wave_name || ''}</span>
         </div>
 
         <div className="voucher-field">
           <span className="field-label">Montant :</span>
           <span className="field-dots">{data.amount ? data.amount + ' Fcfa' : ''}</span>
-        </div>
-
-        <div className="voucher-field" style={{ marginBottom: 0 }}>
-          <span className="field-label">Pour le motif :</span>
-          <span className="field-dots"></span>
-        </div>
-
-        <div className="voucher-reason-block">
-          <div className="lines-background">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="bg-line">
-                <span className="bg-number">{i + 1}-</span>
-              </div>
-            ))}
-          </div>
-          <div className="reason-text">
-            {data.reason}
-          </div>
         </div>
 
         <div className="voucher-signatures">

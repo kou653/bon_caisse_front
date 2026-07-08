@@ -87,46 +87,48 @@
   padding-bottom: 2px;
 }
 
-.voucher-reason-block {
+.voucher-field-motif {
+  display: flex;
+  margin-bottom: 1.5rem;
+  font-size: 14pt;
   position: relative;
-  margin-top: 0.5rem;
-  width: 100%;
+  z-index: 1;
+  align-items: flex-start;
 }
 
-.lines-background {
+.reason-multiline-container {
+  position: relative;
+  flex-grow: 1;
+  min-height: 70px;
+  min-width: 0; /* Empêche le conteneur flex de déborder horizontalement */
+}
+
+.reason-lines-bg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
-.bg-line {
+.bg-line-simple {
   height: 35px;
   border-bottom: 2px dotted #9ca3af;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 2px;
   box-sizing: border-box;
 }
 
-.bg-number {
-  width: 30px;
-  text-align: left;
-  font-size: 14pt;
-}
-
-.reason-text {
+.reason-text-simple {
   position: relative;
   z-index: 1;
   font-size: 14pt;
   line-height: 35px;
-  height: 420px; /* Exact height for 12 lines * 35px */
-  overflow: hidden; /* Prevent text from pushing the page down */
-  padding-left: 35px; /* Offset for numbers */
+  height: 70px; /* Hauteur exacte pour 2 lignes * 35px */
+  overflow: hidden;
   white-space: pre-wrap;
   word-wrap: break-word;
-  padding-top: 2px;
+  box-sizing: border-box;
+  padding-top: 3px; /* Aligne le texte parfaitement au-dessus de la ligne pointillée */
 }
 
 .voucher-signatures {
