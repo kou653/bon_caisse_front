@@ -81,7 +81,7 @@ export default function LoginPage({ onLogin }) {
                 className={`login-input${error ? ' error' : ''}`}
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); setError(''); }}
-                placeholder="admin@dronek.net"
+                placeholder="adresse e-mail"
                 autoComplete="email"
                 required
               />
