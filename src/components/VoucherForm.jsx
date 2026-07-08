@@ -34,7 +34,7 @@ export default function VoucherForm({ data, onChange, onSubmit }) {
 
         <div className="form-group">
           <label>Numéro Wave</label>
-          <input type="text" name="wave_number" value={data.wave_number} onChange={handleChange} placeholder="Numéro Wave" />
+          <input type="tel" name="wave_number" value={data.wave_number} onChange={handleChange} placeholder="Numéro Wave" />
         </div>
 
         <div className="form-group">
