@@ -4,6 +4,7 @@
   background: linear-gradient(135deg, #149655 0%, #ffffff 100%) no-repeat fixed;
   padding: 2.5rem 3rem;
   font-family: 'AvantGarde', sans-serif;
+  animation: fadeIn 0.4s ease-out;
 }
 
 /* ─── HEADER ─── */
@@ -12,6 +13,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2.5rem;
+  animation: fadeInDown 0.4s ease-out 0.1s both;
 }
 
 .list-header-left {
@@ -74,7 +76,7 @@
   font-size: 0.78rem;
   font-family: 'AvantGarde', sans-serif;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-base);
   white-space: nowrap;
 }
 
@@ -82,6 +84,8 @@
   background: #fef2f2;
   color: #b91c1c;
   border-color: #fca5a5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
@@ -95,18 +99,13 @@
   font-family: 'AvantGarde', sans-serif;
   letter-spacing: 0.3px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all var(--transition-base);
 }
 
 .btn-primary:hover {
   background: #333;
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  transition: all var(--transition-base);
-}
-
-.btn-primary {
-  transition: all var(--transition-base);
 }
 
 /* ─── STATS ─── */
@@ -167,6 +166,7 @@
 .list-search-bar:focus-within {
   border-color: #149655;
   box-shadow: 0 4px 12px rgba(20, 150, 85, 0.15);
+  transform: translateY(-2px);
 }
 
 .list-search-bar input {
@@ -216,6 +216,7 @@
   text-transform: uppercase;
   color: #888;
   background: #fff;
+  border-bottom: 2px solid #1a1a1a;
 }
 
 .list-table tbody tr {

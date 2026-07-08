@@ -39,7 +39,7 @@
 
 /* Carte principale */
 .login-card {
-  background: rgba(255, 255, 255, 0.97);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(249, 250, 251, 0.95) 100%);
   backdrop-filter: blur(20px);
   border-radius: 24px;
   padding: 3rem 2.8rem;
@@ -47,10 +47,19 @@
   max-width: 420px;
   box-shadow:
     0 32px 64px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.2);
+    0 0 0 1px rgba(20, 150, 85, 0.15);
   position: relative;
   z-index: 1;
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  border: 1px solid rgba(20, 150, 85, 0.1);
+  transition: all var(--transition-base);
+}
+
+.login-card:hover {
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(20, 150, 85, 0.2);
+  transform: translateY(-4px);
 }
 
 @keyframes slideUp {
@@ -81,7 +90,10 @@
   text-align: center;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #0a2e1a;
+  background: linear-gradient(135deg, #149655 0%, #0a2e1a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 0.4rem;
   letter-spacing: 0.5px;
 }
@@ -97,7 +109,8 @@
 /* Divider */
 .login-divider {
   border: none;
-  border-top: 1px solid #e5e7eb;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
   margin-bottom: 2rem;
 }
 
@@ -119,7 +132,10 @@
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: #374151;
+  background: linear-gradient(135deg, #149655 0%, #0a2e1a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .login-input-wrapper {
@@ -139,27 +155,28 @@
 .login-input {
   width: 100%;
   padding: 0.75rem 0.9rem 0.75rem 2.6rem;
-  border: 1.5px solid #e5e7eb;
+  border: 2px solid #e5e7eb;
   border-radius: 10px;
   font-size: 0.92rem;
   font-family: 'AvantGarde', system-ui, sans-serif;
   color: #1f2937;
-  background: #f9fafb;
-  transition: all 0.2s;
+  background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+  transition: all var(--transition-base);
   box-sizing: border-box;
   outline: none;
 }
 
 .login-input:focus {
   border-color: #149655;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(20, 150, 85, 0.12);
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  box-shadow: 0 0 0 4px rgba(20, 150, 85, 0.15), 0 4px 12px rgba(20, 150, 85, 0.12);
+  transform: translateY(-1px);
 }
 
 .login-input.error {
   border-color: #ef4444;
-  background: #fef2f2;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 3%, #fef2f2 100%);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
 }
 
 /* Afficher/Masquer mot de passe */
@@ -183,8 +200,8 @@
 
 /* Message d'erreur */
 .login-error {
-  background: #fef2f2;
-  border: 1px solid #fca5a5;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border: 1.5px solid #fca5a5;
   border-radius: 8px;
   padding: 0.7rem 1rem;
   font-size: 0.82rem;
@@ -192,13 +209,15 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.12);
+  animation: fadeInUp 0.3s ease-out;
 }
 
 /* Bouton de connexion */
 .login-btn {
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(135deg, #149655, #0d7a43);
+  background: linear-gradient(135deg, #149655 0%, #0d7a43 50%, #0a5c32 100%);
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -207,24 +226,41 @@
   font-weight: bold;
   letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-base);
   margin-top: 0.5rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(20, 150, 85, 0.2);
+}
+
+.login-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left var(--transition-slow);
 }
 
 .login-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #0d7a43, #0a5c32);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(20, 150, 85, 0.35);
+  background: linear-gradient(135deg, #0d7a43 0%, #0a5c32 50%, #084e2a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(20, 150, 85, 0.35);
+}
+
+.login-btn:hover:not(:disabled)::before {
+  left: 100%;
 }
 
 .login-btn:active:not(:disabled) {
   transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(20, 150, 85, 0.2);
 }
 
 .login-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 

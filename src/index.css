@@ -7,6 +7,8 @@
   --primary: #149655;
   --primary-dark: #0a2e1a;
   --primary-light: #1db366;
+  --accent: #f97316;
+  --accent-light: #fb923c;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
@@ -79,6 +81,33 @@
   }
   50% {
     box-shadow: 0 0 12px rgba(20, 150, 85, 0.15);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shimmerLeft {
+  0% {
+    background-position: -1200px 0;
+  }
+  100% {
+    background-position: 1200px 0;
   }
 }
 
