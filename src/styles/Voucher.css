@@ -141,7 +141,7 @@
 .voucher-signatures {
   display: flex;
   justify-content: space-between;
-  margin-top: 5rem;
+  margin-top: 22rem;
   position: relative;
   z-index: 1;
 }
