@@ -11,7 +11,7 @@ export default function VoucherPreview({ data }) {
         <h1 className="voucher-title">BON DE CAISSE</h1>
 
         <div className="voucher-field">
-          <span className="field-label">Projet :</span>
+          <span className="field-label">PROJET :</span>
           <span className="field-dots">{data.project || ''}</span>
         </div>
 
