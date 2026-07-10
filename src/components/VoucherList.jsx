@@ -242,8 +242,8 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
               <tr>
                 <th>N°</th>
                 <th><ColumnFilter filterKey="project" placeholder="Projet" /></th>
-                <th><ColumnFilter filterKey="wave_number" placeholder="N° Wave" /></th>
-                <th><ColumnFilter filterKey="wave_name" placeholder="Nom Wave" /></th>
+                <th><ColumnFilter filterKey="wave_number" placeholder="Numéro" /></th>
+                <th><ColumnFilter filterKey="wave_name" placeholder="Nom_Demandeur" /></th>
                 <th>Montant</th>
                 <th><ColumnFilter filterKey="reason" placeholder="Motif" /></th>
                 <th><ColumnFilter filterKey="date" placeholder="Date" /></th>
