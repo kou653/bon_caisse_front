@@ -260,6 +260,35 @@
   font-size: 0.95rem;
 }
 
+/* ─── BOUTON RÉINITIALISER FILTRES ─── */
+.btn-reset-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(20, 150, 85, 0.08);
+  color: #0a5c32;
+  border: 1px solid rgba(20, 150, 85, 0.25);
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: bold;
+  font-family: 'AvantGarde', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.btn-reset-filters:hover {
+  background: linear-gradient(135deg, #149655 0%, #0d7a43 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(20, 150, 85, 0.3);
+}
+
+.btn-reset-filters-empty {
+  margin: 1rem auto 0;
+}
+
 /* ─── TABLEAU ─── */
 .list-table-wrapper {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(249, 250, 251, 0.95) 100%);
@@ -277,7 +306,7 @@
 }
 
 .list-table thead th {
-  padding: 0.9rem 1.1rem;
+  padding: 0.75rem 1.1rem;
   text-align: left;
   font-size: 0.7rem;
   font-weight: bold;
@@ -330,6 +359,22 @@
 }
 
 .td-reason {
+  color: #6b7280;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.83rem;
+}
+
+.td-wave-number {
+  color: #374151;
+  font-size: 0.83rem;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.td-wave-name {
   color: #6b7280;
   max-width: 150px;
   white-space: nowrap;
@@ -422,49 +467,46 @@
   box-shadow: 0 8px 20px rgba(239, 68, 68, 0.15);
 }
 
-/* ─── TRI ─── */
-.sort-btn {
-  background: none;
-  border: none;
-  color: #9ca3af;
+/* ─── FILTRE PAR COLONNE (liste déroulante, sert d'en-tête) ─── */
+.col-filter {
+  width: 100%;
   font-size: 0.7rem;
   font-weight: bold;
-  letter-spacing: 0.7px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0;
-  transition: color 0.2s;
   font-family: 'AvantGarde', sans-serif;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 0.2rem 1.1rem 0.2rem 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%239ca3af' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.15rem center;
 }
 
-.sort-btn:hover {
+.col-filter:hover {
   color: #149655;
 }
 
-.sort-btn.active {
+.col-filter:focus {
+  outline: none;
   color: #0a5c32;
 }
 
-.sort-arrow {
-  display: inline-block;
-  font-size: 0.65rem;
-  transition: transform 0.2s;
-  opacity: 0.4;
+.col-filter.active {
+  color: #0a5c32;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23149655' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
 }
 
-.sort-btn.active .sort-arrow {
-  opacity: 1;
-}
-
-.sort-btn.active .sort-arrow.up {
-  transform: rotate(180deg);
-}
-
-.sort-btn.active .sort-arrow.down {
-  transform: rotate(0deg);
+.col-filter option {
+  color: #374151;
+  font-weight: 500;
+  text-transform: none;
 }
 
 /* ─── RESPONSIVE ─── */
@@ -485,6 +527,12 @@
   }
   .list-table-wrapper {
     overflow-x: auto;
+  }
+  .col-filter {
+    max-width: 110px;
+  }
+  .list-search-bar {
+    flex-wrap: wrap;
   }
 }
 

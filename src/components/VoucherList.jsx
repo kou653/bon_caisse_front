@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import '../styles/VoucherList.css';
 
 const API = 'http://localhost:8000/api';
@@ -11,13 +11,22 @@ const fetchWithTimeout = (url, options = {}, ms = 8000) => {
     .finally(() => clearTimeout(id));
 };
 
+// Colonnes filtrables : clé technique, clé du champ voucher, et fonction d'extraction de la valeur affichée
+const FILTERABLE_COLUMNS = [
+  { key: 'project', field: 'project' },
+  { key: 'wave_number', field: 'wave_number' },
+  { key: 'wave_name', field: 'wave_name' },
+  { key: 'reason', field: 'reason' },
+];
+
+const EMPTY_FILTERS = { project: '', wave_number: '', wave_name: '', reason: '', date: '' };
+
 export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, authUser, onLogout }) {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState(null); // 'project', 'reason', 'date'
-  const [sortOrder, setSortOrder] = useState('asc'); // 'asc', 'desc'
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
 
   useEffect(() => {
     fetchWithTimeout(`${API}/cash-vouchers?t=` + Date.now(), {
@@ -49,54 +58,6 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
       });
   }, [authToken]);
 
-  const filtered = vouchers.filter(v =>
-    (v.project || '').toLowerCase().includes(search.toLowerCase()) ||
-    (v.reason || '').toLowerCase().includes(search.toLowerCase()) ||
-    String(v.id).includes(search)
-  );
-
-  // Fonction de tri
-  const handleSort = (column) => {
-    if (sortBy === column) {
-      // Si on clique sur la même colonne, inverser l'ordre
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      // Nouvelle colonne, tri ascendant par défaut
-      setSortBy(column);
-      setSortOrder('asc');
-    }
-  };
-
-  // Appliquer le tri au tableau filtré
-  const sorted = [...filtered].sort((a, b) => {
-    let aVal, bVal;
-
-    if (sortBy === 'project') {
-      aVal = (a.project || '').toLowerCase();
-      bVal = (b.project || '').toLowerCase();
-    } else if (sortBy === 'reason') {
-      aVal = (a.reason || '').toLowerCase();
-      bVal = (b.reason || '').toLowerCase();
-    } else if (sortBy === 'date') {
-      aVal = new Date(a.created_at) || new Date(0);
-      bVal = new Date(b.created_at) || new Date(0);
-    }
-
-    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
-    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
-    return 0;
-  });
-
-  console.log("Calcul totalMontant pour vouchers:", vouchers);
-  const totalMontant = vouchers.reduce((acc, v) => {
-    // Nettoie la chaîne (enlève les espaces et remplace la virgule par un point)
-    const amountStr = String(v.amount || '').replace(/\s/g, '').replace(',', '.');
-    const val = parseFloat(amountStr) || 0;
-    console.log(`id: ${v.id}, amount brut: ${v.amount}, nettoyé: ${amountStr}, parsed: ${val}`);
-    return acc + val;
-  }, 0);
-  console.log("totalMontant calculé:", totalMontant);
-
   const formatDate = (dateStr) => {
     if (!dateStr) return '–';
     return new Date(dateStr).toLocaleDateString('fr-FR', {
@@ -109,11 +70,90 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
     return Number(val).toLocaleString('fr-FR') + ' Fcfa';
   };
 
+  // Valeurs uniques disponibles pour chaque colonne filtrable (calculées sur l'ensemble des bons)
+  const uniqueValues = useMemo(() => {
+    const result = {};
+    FILTERABLE_COLUMNS.forEach(({ key, field }) => {
+      const set = new Set();
+      vouchers.forEach(v => {
+        const val = v[field];
+        if (val !== null && val !== undefined && String(val).trim() !== '') {
+          set.add(String(val));
+        }
+      });
+      result[key] = [...set].sort((a, b) => a.localeCompare(b, 'fr'));
+    });
+    const dateSet = new Set();
+    vouchers.forEach(v => {
+      if (v.created_at) dateSet.add(formatDate(v.created_at));
+    });
+    result.date = [...dateSet].sort((a, b) => {
+      // tri chronologique à partir du format jj/mm/aaaa
+      const [da, ma, ya] = a.split('/');
+      const [db, mb, yb] = b.split('/');
+      return new Date(ya, ma - 1, da) - new Date(yb, mb - 1, db);
+    });
+    return result;
+  }, [vouchers]);
+
+  const hasActiveFilters = search !== '' || Object.values(filters).some(v => v !== '');
+
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  const resetFilters = () => {
+    setSearch('');
+    setFilters(EMPTY_FILTERS);
+  };
+
+  const filtered = vouchers.filter(v => {
+    const matchesSearch =
+      (v.project || '').toLowerCase().includes(search.toLowerCase()) ||
+      (v.reason || '').toLowerCase().includes(search.toLowerCase()) ||
+      (v.wave_number || '').toLowerCase().includes(search.toLowerCase()) ||
+      (v.wave_name || '').toLowerCase().includes(search.toLowerCase()) ||
+      String(v.id).includes(search);
+
+    if (!matchesSearch) return false;
+
+    for (const { key, field } of FILTERABLE_COLUMNS) {
+      if (filters[key] && String(v[field] || '') !== filters[key]) return false;
+    }
+    if (filters.date && formatDate(v.created_at) !== filters.date) return false;
+
+    return true;
+  });
+
+  const sorted = filtered;
+
+  const totalMontant = vouchers.reduce((acc, v) => {
+    // Nettoie la chaîne (enlève les espaces et remplace la virgule par un point)
+    const amountStr = String(v.amount || '').replace(/\s/g, '').replace(',', '.');
+    const val = parseFloat(amountStr) || 0;
+    return acc + val;
+  }, 0);
+
   const handleLogoutClick = () => {
     if (window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
       onLogout();
     }
   };
+
+  // Petit composant local pour la liste déroulante de filtre par colonne
+  const ColumnFilter = ({ filterKey, placeholder }) => (
+    <select
+      className={`col-filter ${filters[filterKey] ? 'active' : ''}`}
+      value={filters[filterKey]}
+      onChange={e => handleFilterChange(filterKey, e.target.value)}
+      onClick={e => e.stopPropagation()}
+    >
+      <option value="">{placeholder}</option>
+      {uniqueValues[filterKey]?.map(val => (
+        <option key={val} value={val}>{val}</option>
+      ))}
+    </select>
+  );
 
   return (
     <div className="list-page">
@@ -166,7 +206,7 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
         <span className="list-search-icon">⌕</span>
         <input
           type="text"
-          placeholder="Rechercher par projet, motif ou numéro..."
+          placeholder="Rechercher par projet, motif, wave ou numéro..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -175,6 +215,11 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
             onClick={() => setSearch('')}
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#bbb', fontSize: '1rem' }}
           >✕</button>
+        )}
+        {hasActiveFilters && (
+          <button className="btn-reset-filters" onClick={resetFilters} title="Réinitialiser tous les filtres">
+            ↺ Réinitialiser
+          </button>
         )}
       </div>
 
@@ -196,53 +241,27 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
             <thead>
               <tr>
                 <th>N°</th>
-                <th>
-                  <button 
-                    className={`sort-btn ${sortBy === 'project' ? 'active' : ''}`}
-                    onClick={() => handleSort('project')}
-                    title="Trier par projet"
-                  >
-                    Projet 
-                    <span className={`sort-arrow ${sortBy === 'project' ? (sortOrder === 'asc' ? 'up' : 'down') : ''}`}>
-                      ▼
-                    </span>
-                  </button>
-                </th>
+                <th><ColumnFilter filterKey="project" placeholder="Projet" /></th>
+                <th><ColumnFilter filterKey="wave_number" placeholder="N° Wave" /></th>
+                <th><ColumnFilter filterKey="wave_name" placeholder="Nom Wave" /></th>
                 <th>Montant</th>
-                <th>
-                  <button 
-                    className={`sort-btn ${sortBy === 'reason' ? 'active' : ''}`}
-                    onClick={() => handleSort('reason')}
-                    title="Trier par motif"
-                  >
-                    Motif 
-                    <span className={`sort-arrow ${sortBy === 'reason' ? (sortOrder === 'asc' ? 'up' : 'down') : ''}`}>
-                      ▼
-                    </span>
-                  </button>
-                </th>
-                <th>
-                  <button 
-                    className={`sort-btn ${sortBy === 'date' ? 'active' : ''}`}
-                    onClick={() => handleSort('date')}
-                    title="Trier par date"
-                  >
-                    Date 
-                    <span className={`sort-arrow ${sortBy === 'date' ? (sortOrder === 'asc' ? 'up' : 'down') : ''}`}>
-                      ▼
-                    </span>
-                  </button>
-                </th>
+                <th><ColumnFilter filterKey="reason" placeholder="Motif" /></th>
+                <th><ColumnFilter filterKey="date" placeholder="Date" /></th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {sorted.length === 0 ? (
                 <tr>
-                  <td colSpan={6}>
+                  <td colSpan={8}>
                     <div className="list-empty">
                       <div className="list-empty-icon">📄</div>
-                      <p>{search ? 'Aucun résultat pour cette recherche.' : 'Aucun bon de caisse enregistré.'}</p>
+                      <p>{hasActiveFilters ? 'Aucun résultat pour ces critères.' : 'Aucun bon de caisse enregistré.'}</p>
+                      {hasActiveFilters && (
+                        <button className="btn-reset-filters btn-reset-filters-empty" onClick={resetFilters}>
+                          ↺ Réinitialiser les filtres
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -251,6 +270,8 @@ export default function VoucherList({ onNewVoucher, onViewVoucher, authToken, au
                   <tr key={v.id}>
                     <td className="td-id">#{v.id}</td>
                     <td className="td-project">{v.project || <span style={{color:'#ddd'}}>—</span>}</td>
+                    <td className="td-wave-number">{v.wave_number || <span style={{color:'#ddd'}}>—</span>}</td>
+                    <td className="td-wave-name">{v.wave_name || <span style={{color:'#ddd'}}>—</span>}</td>
                     <td className="td-amount">{formatMontant(v.amount)}</td>
                     <td className="td-reason">{v.reason || <span style={{color:'#ddd'}}>—</span>}</td>
                     <td className="td-date">{formatDate(v.created_at)}</td>
